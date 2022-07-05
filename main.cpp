@@ -4,9 +4,29 @@
 
 using namespace std;
 
-
-int main() {
+void displayHelpMenu()
+{
     string input;
+    cout << "====================================================================================================" << endl;
+    cout << "*                   HELP MENU                                                                      *" << endl;
+    cout << "===================================================================================================*" << endl;
+    cout << "add <Location>                                            : Add a new location" << endl;
+    cout << "delete <Location>                                         : Delete an existing location" << endl;
+    cout << "record <Location> <disease> <cases>                       : Record a disease and its" << endl;
+    cout << "list locations                                            : List all existing locations" << endl;
+    cout << "list diseases                                             : List all existing DIseases in locations" << endl;
+    cout << "where <disease>                                           : Find where disease exists" << endl;
+    cout << "cases <locations> <disease>                               : FInd total cases of a given disease" << endl;
+    cout << "help                                                      : Prints user manual" << endl;
+    cout << "Exist                                                     : Exit the program" << endl;
+    cout << "Console > ";
+    getline(cin, input);
+}
+
+int main()
+{
+    string input;
+    cout << endl;
     cout << "==================================================" << endl;
     cout << "*   Welcome to Disease Cases Reporting System!   *" << endl;
     cout << "*   *******************************************  *" << endl;
@@ -22,32 +42,6 @@ int main() {
 
     if (input == "help")
     {
-
-        cout << "==================================================" << endl;
-        cout << "*                   HELP MENU                    *" << endl;
-        cout << "=================================================*" << endl;
-        cout << "add <Location>                                            : Add a new location" << endl;
-        cout << "delete <Location>                                         : Delete an existing location" << endl;
-        cout << "record <Location> <disease> <cases>                       : Record a disease and its" << endl;
-        cout << "list locations                                            : List all existing locations" << endl;
-        cout << "list diseases                                             : List all existing DIseases in locations" << endl;
-        cout << "where <disease>                                           : Find where disease exists" << endl;
-        cout << "cases <locations> <disease>                               : FInd total cases of a given disease" << endl;
-        cout << "help                                                      : Prints user manual" << endl;
-        cout << "Exist                                                     : Exit the program" << endl;
+        displayHelpMenu();
     }
-    
-
-    // switch (input)
-    // {
-    // case "help":
-
-    //     cout << "==================================================" << endl;
-    //     cout << "*                   HELP MENU                    *" << endl;
-    //     cout << "=================================================*" << endl;
-    //     break;
-    
-    // default:
-    //     break;
-    // }
 }
