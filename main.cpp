@@ -32,7 +32,8 @@ void displayHelpMenu()
     else if (input == "list diseases")
     {
         vector<Disease> diseases = get_all_diseases();
-        print_diseases(diseases);
+        vector<Disease> sorted_diseases = sort_diseases(diseases);
+        print_diseases(sorted_diseases);
     }
     else if (input == "exit")
     {

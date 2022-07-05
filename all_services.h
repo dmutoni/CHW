@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include "./helper.cpp"
+#include <bits/stdc++.h>
+
 
 using namespace std;
 
@@ -35,6 +37,7 @@ bool is_locations_empty_file(std::ifstream &pFile)
     return pFile.peek() == std::ifstream::traits_type::eof();
 }
 
+
 vector<Location> get_all_locations()
 {
     ifstream file("locations.txt", ios::in);
@@ -58,39 +61,6 @@ vector<Location> get_all_locations()
     return locations;
 }
 
-int get_latest_location_id()
-{
-    ifstream file("locations.txt", ios::in);
-    if (is_locations_empty_file(file))
-        return 0;
-    vector<Location> locations = get_all_locations();
-    return locations.back().id;
-}
-
-void print_locations(vector<Location> locations)
-{
-    for (int i = 0; i < locations.size(); i++)
-    {
-        cout << locations[i].name << endl;
-    }
-}
-
-void add_location(string name)
-{
-    Location location;
-    ofstream file("locations.txt", ios::out | ios::app);
-    cout << "reading file..." << endl;
-    location.id = get_latest_location_id() + 1, name;
-    location.name = name;
-    file << location.id << "," << location.name << endl;
-    cout << "Location " << name << " is successfully added!" << endl;
-    file.close();
-}
-
-bool is_disease_empty_file(std::ifstream &pFile)
-{
-    return pFile.peek() == std::ifstream::traits_type::eof();
-}
 
 vector<Disease> get_all_diseases()
 {
@@ -113,6 +83,73 @@ vector<Disease> get_all_diseases()
     }
     file.close();
     return diseases;
+}
+
+bool disease_exists(string name)
+{
+    vector<Disease> diseases = get_all_diseases();
+    for (int i = 0; i < diseases.size(); i++)
+    {
+        if (diseases[i].name == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool location_exists(string name)
+{
+    vector<Location> locations = get_all_locations();
+    for (int i = 0; i < locations.size(); i++)
+    {
+        if (locations[i].name == name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int get_latest_location_id()
+{
+    ifstream file("locations.txt", ios::in);
+    if (is_locations_empty_file(file))
+        return 0;
+    vector<Location> locations = get_all_locations();
+    return locations.back().id;
+}
+
+void print_locations(vector<Location> locations)
+{
+    for (int i = 0; i < locations.size(); i++)
+    {
+        cout << locations[i].name << endl;
+    }
+}
+
+void add_location(string name)
+{
+
+    if (location_exists(name))
+    {
+        cout << "Sorry, location already exists" << endl;
+        add_location(name);
+    }
+
+    Location location;
+    ofstream file("locations.txt", ios::out | ios::app);
+    cout << "reading file..." << endl;
+    location.id = get_latest_location_id() + 1, name;
+    location.name = name;
+    file << location.id << "," << location.name << endl;
+    cout << "Location " << name << " is successfully added!" << endl;
+    file.close();
+}
+
+bool is_disease_empty_file(std::ifstream &pFile)
+{
+    return pFile.peek() == std::ifstream::traits_type::eof();
 }
 
 int get_latest_disease_id()
@@ -231,7 +268,12 @@ void update_to_file_from_vector_cases(vector<Case> cases)
 
 void add_case(string location, string disease, int cases)
 {
-    add_disease(disease);
+
+    if (!disease_exists(disease))
+    {
+        add_disease(disease);
+    }
+    
     Case case_instance;
     ofstream file("cases.txt", ios::out | ios::app);
     case_instance.id = 2;
@@ -322,6 +364,28 @@ int count_words_of_a_string(string sentence)
     }
     return count + 1;
 }
+
+// function to return sorted vector<Disease>
+vector<Disease> sort_diseases(vector<Disease> diseases)
+{
+    vector<Disease> sorted_diseases;
+    for (int i = 0; i < diseases.size(); i++)
+    {
+        int max_index = i;
+        for (int j = i + 1; j < diseases.size(); j++)
+        {
+            if (diseases[j].name < diseases[max_index].name)
+            {
+                max_index = j;
+            }
+        }
+        Disease temp = diseases[i];
+        diseases[i] = diseases[max_index];
+        diseases[max_index] = temp;
+    }
+    return diseases;
+}
+
 void delete_location(string location_name)
 {
     int count_location = 0;
