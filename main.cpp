@@ -9,98 +9,59 @@ using namespace std;
 
 void displayHelpMenu()
 {
-    string input;
-    cout << "====================================================================================================" << endl;
-    cout << "*                   HELP MENU                                                                      *" << endl;
-    cout << "===================================================================================================*" << endl;
-    cout << "add <Location>                                            : Add a new location" << endl;
-    cout << "delete <Location>                                         : Delete an existing location" << endl;
-    cout << "record <Location> <disease> <cases>                       : Record a disease and its" << endl;
-    cout << "list locations                                            : List all existing locations" << endl;
-    cout << "list diseases                                             : List all existing DIseases in locations" << endl;
-    cout << "where <disease>                                           : Find where disease exists" << endl;
-    cout << "cases <locations> <disease>                               : FInd total cases of a given disease" << endl;
-    cout << "help                                                      : Prints user manual" << endl;
-    cout << "Exist                                                     : Exit the program" << endl;
-    cout << "Console > ";
-    getline(cin, input);
-    if (input == "list locations")
+    do
     {
-        vector<Location> locations = get_all_locations();
-        print_locations(locations);
-    }
-    else if (input == "list diseases")
-    {
-        vector<Disease> diseases = get_all_diseases();
-        vector<Disease> sorted_diseases = sort_diseases(diseases);
-        print_diseases(sorted_diseases);
-    }
-    else if (input == "exit")
-    {
-        cout << "Exiting the program..." << endl;
-        exit(0);
-    }
-    else if (input.find("add") != std::string::npos)
-    {
-        stringstream ss(input);
-        vector<string> fields;
-        string field;
-
-        while (getline(ss, field, ' '))
+        string input;
+        cout << "====================================================================================================" << endl;
+        cout << "*                   HELP MENU                                                                      *" << endl;
+        cout << "===================================================================================================*" << endl;
+        cout << "add <Location>                                            : Add a new location" << endl;
+        cout << "delete <Location>                                         : Delete an existing location" << endl;
+        cout << "record <Location> <disease> <cases>                       : Record a disease and its" << endl;
+        cout << "list locations                                            : List all existing locations" << endl;
+        cout << "list diseases                                             : List all existing DIseases in locations" << endl;
+        cout << "where <disease>                                           : Find where disease exists" << endl;
+        cout << "cases <locations> <disease>                               : FInd total cases of a given disease" << endl;
+        cout << "help                                                      : Prints user manual" << endl;
+        cout << "Exist                                                     : Exit the program" << endl;
+        cout << "Console > ";
+        getline(cin, input);
+        if (input == "list locations")
         {
-            fields.push_back(field);
+            vector<Location> locations = get_all_locations();
+            print_locations(locations);
         }
-
-        string location = fields[1];
-        add_location(location);
-    }
-    else if (input.find("record") != std::string::npos)
-    {
-        stringstream ss(input);
-        vector<string> fields;
-        string field;
-
-        while (getline(ss, field, ' '))
+        else if (input == "list diseases")
         {
-            fields.push_back(field);
+            vector<Disease> diseases = get_all_diseases();
+            vector<Disease> sorted_diseases = sort_diseases(diseases);
+            print_diseases(sorted_diseases);
         }
-
-        string location = fields[1];
-        string disease = fields[2];
-        int cases = stoi(fields[3]);
-        cout << "Recording " << cases << " cases of " << disease << " in " << location << endl;
-        add_case(location, disease, cases);
-    }
-    else if (input.find("where") != std::string::npos)
-    {
-        stringstream ss(input);
-        vector<string> fields;
-        string field;
-
-        while (getline(ss, field, ' '))
+        else if (input == "exit")
         {
-            fields.push_back(field);
+            cout << "Exiting the program..." << endl;
+            exit(0);
         }
-
-        string location = fields[1];
-        get_disease_occurrence(location);
-    }
-    else if (input.find("cases") != std::string::npos)
-    {
-        stringstream ss(input);
-        vector<string> fields;
-        string field;
-        if (count_words_of_a_string(input) == 2)
+        else if (input.find("add") != std::string::npos)
         {
+            stringstream ss(input);
+            vector<string> fields;
+            string field;
+
             while (getline(ss, field, ' '))
             {
                 fields.push_back(field);
             }
 
             string location = fields[1];
-            get_total_case_per_disease(location);
-        } else if(count_words_of_a_string(input) == 3)
+            add_location(location);
+        }
+        else if (input.find("record") != std::string::npos)
         {
+            stringstream ss(input);
+            vector<string> fields;
+            string field;
+
             while (getline(ss, field, ' '))
             {
                 fields.push_back(field);
@@ -108,28 +69,74 @@ void displayHelpMenu()
 
             string location = fields[1];
             string disease = fields[2];
-            get_total_case_per_location_per_disease(location, disease);
+            int cases = stoi(fields[3]);
+            cout << "Recording " << cases << " cases of " << disease << " in " << location << endl;
+            add_case(location, disease, cases);
         }
-    }
-    else if (input.find("delete") != std::string::npos)
-    {
-        stringstream ss(input);
-        vector<string> fields;
-        string field;
-
-        while (getline(ss, field, ' '))
+        else if (input.find("where") != std::string::npos)
         {
-            fields.push_back(field);
-        }
+            stringstream ss(input);
+            vector<string> fields;
+            string field;
 
-        string location = fields[1];
-        delete_location(location);
-    }
-    else
-    {
-        cout << "Invalid input" << endl;
-        displayHelpMenu();
-    }
+            while (getline(ss, field, ' '))
+            {
+                fields.push_back(field);
+            }
+
+            string location = fields[1];
+            get_disease_occurrence(location);
+        }
+        else if (input.find("cases") != std::string::npos)
+        {
+            stringstream ss(input);
+            vector<string> fields;
+            string field;
+            if (count_words_of_a_string(input) == 2)
+            {
+                while (getline(ss, field, ' '))
+                {
+                    fields.push_back(field);
+                }
+
+                string location = fields[1];
+                get_total_case_per_disease(location);
+            }
+            else if (count_words_of_a_string(input) == 3)
+            {
+                while (getline(ss, field, ' '))
+                {
+                    fields.push_back(field);
+                }
+
+                string location = fields[1];
+                string disease = fields[2];
+                get_total_case_per_location_per_disease(location, disease);
+            }
+        }
+        else if (input.find("delete") != std::string::npos)
+        {
+            stringstream ss(input);
+            vector<string> fields;
+            string field;
+
+            while (getline(ss, field, ' '))
+            {
+                fields.push_back(field);
+            }
+
+            string location = fields[1];
+            delete_location(location);
+        }
+        else if(input == "Exit"){
+            exit(0);
+        }
+        else
+        {
+            cout << "Invalid input" << endl;
+            displayHelpMenu();
+        }
+    } while (true);
 }
 
 int main()
