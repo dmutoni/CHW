@@ -41,7 +41,16 @@ void displayHelpMenu()
     }
     else if (input.find("add") != std::string::npos)
     {
-        string location = input.substr(input.find("add") + 3);
+        stringstream ss(input);
+        vector<string> fields;
+        string field;
+
+        while (getline(ss, field, ' '))
+        {
+            fields.push_back(field);
+        }
+
+        string location = fields[1];
         add_location(location);
     }
     else if (input.find("record") != std::string::npos)
@@ -58,7 +67,48 @@ void displayHelpMenu()
         string location = fields[1];
         string disease = fields[2];
         int cases = stoi(fields[3]);
+        cout << "Recording " << cases << " cases of " << disease << " in " << location << endl;
         add_case(location, disease, cases);
+    }
+    else if (input.find("where") != std::string::npos)
+    {
+        stringstream ss(input);
+        vector<string> fields;
+        string field;
+
+        while (getline(ss, field, ' '))
+        {
+            fields.push_back(field);
+        }
+
+        string location = fields[1];
+        get_disease_occurrence(location);
+    }
+    else if (input.find("cases") != std::string::npos)
+    {
+        stringstream ss(input);
+        vector<string> fields;
+        string field;
+        if (count_words_of_a_string(input) == 2)
+        {
+            while (getline(ss, field, ' '))
+            {
+                fields.push_back(field);
+            }
+
+            string location = fields[1];
+            get_total_case_per_disease(location);
+        } else if(count_words_of_a_string(input) == 3)
+        {
+            while (getline(ss, field, ' '))
+            {
+                fields.push_back(field);
+            }
+
+            string location = fields[1];
+            string disease = fields[2];
+            get_total_case_per_location_per_disease(location, disease);
+        }
     }
     else
     {

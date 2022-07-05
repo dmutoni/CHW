@@ -1,1 +1,4 @@
-1,NYabihu,flu,27
+1,nyabihu,flue,27
+2,nyabihu,flue,27
+3,KIGALI,flue,27
+3,KIGALI,fever,42

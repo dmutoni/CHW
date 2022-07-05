@@ -8,15 +8,17 @@
 
 using namespace std;
 
-class Location {
-    public:
-        int id;
-        string name;
+class Location
+{
+public:
+    int id;
+    string name;
 };
-class Disease {
-    public:
-        int id;
-        string name;
+class Disease
+{
+public:
+    int id;
+    string name;
 };
 
 class Case
@@ -27,7 +29,6 @@ public:
     string location;
     string disease;
 };
-
 
 bool is_locations_empty_file(std::ifstream &pFile)
 {
@@ -57,11 +58,11 @@ vector<Location> get_all_locations()
     return locations;
 }
 
-
 int get_latest_location_id()
 {
     ifstream file("locations.txt", ios::in);
-    if (is_locations_empty_file(file)) return 0;
+    if (is_locations_empty_file(file))
+        return 0;
     vector<Location> locations = get_all_locations();
     return locations.back().id;
 }
@@ -74,7 +75,8 @@ void print_locations(vector<Location> locations)
     }
 }
 
-void add_location(string name) {
+void add_location(string name)
+{
     Location location;
     ofstream file("locations.txt", ios::out | ios::app);
     cout << "reading file..." << endl;
@@ -113,11 +115,11 @@ vector<Disease> get_all_diseases()
     return diseases;
 }
 
-
 int get_latest_disease_id()
 {
     ifstream file("diseases.txt", ios::in);
-    if (is_disease_empty_file(file)) return 0;
+    if (is_disease_empty_file(file))
+        return 0;
     vector<Disease> diseases = get_all_diseases();
     return diseases.back().id;
 }
@@ -130,7 +132,8 @@ void print_diseases(vector<Disease> diseases)
     }
 }
 
-void add_disease(string name) {
+void add_disease(string name)
+{
     Disease disease;
     ofstream file("diseases.txt", ios::out | ios::app);
     cout << "reading file..." << endl;
@@ -140,7 +143,6 @@ void add_disease(string name) {
     cout << "Disease " << name << " is successfully added!" << endl;
     file.close();
 }
-
 
 bool is_case_empty_file(std::ifstream &pFile)
 {
@@ -161,18 +163,18 @@ vector<Case> get_all_cases()
             fields.push_back(field);
         }
         Case case_instance;
+        case_instance.cases = stoi(fields[3]);
         case_instance.id = stoi(fields[0]);
-        case_instance.cases = stoi(fields[1]);
         for (int i = 0; i < get_all_diseases().size(); i++)
         {
-            if (get_all_diseases()[i].name == cases[i].disease)
+            if (get_all_diseases()[i].name == fields[2])
             {
                 case_instance.disease = get_all_diseases()[i].name;
             }
         }
         for (int i = 0; i < get_all_locations().size(); i++)
         {
-            if (get_all_locations()[i].name == cases[i].location)
+            if (get_all_locations()[i].name == fields[1])
             {
                 case_instance.location = get_all_locations()[i].name;
             }
@@ -201,13 +203,90 @@ void print_cases(vector<Case> cases)
 
 void add_case(string location, string disease, int cases)
 {
+    add_disease(disease);
     Case case_instance;
     ofstream file("cases.txt", ios::out | ios::app);
-
-    case_instance.id = get_latest_case_id() + 1;
+    case_instance.id = 2;
     case_instance.disease = disease;
     case_instance.location = location;
     case_instance.cases = cases;
     file << case_instance.id << "," << case_instance.location << "," << case_instance.disease << "," << case_instance.cases << endl;
     file.close();
+}
+
+void get_disease_occurrence(string disease)
+{
+    vector<Case> cases = get_all_cases();
+    vector<string> locations;
+    for (int i = 0; i < cases.size(); i++)
+    {
+        if (cases[i].disease == disease)
+        {
+            locations.push_back(cases[i].location);
+        }
+    }
+    cout << "[";
+    for (int i = 0; i < locations.size(); i++)
+    {
+        cout << locations[i] << " ";
+    }
+    cout << "]" << endl;
+}
+void get_case_per_location (string location, string disease) {
+    vector<Case> cases = get_all_cases();
+    vector<string> locations;
+    for (int i = 0; i < cases.size(); i++)
+    {
+        if (cases[i].location == location)
+        {
+            if (cases[i].disease == disease)
+            {
+                cout << "Cases of " << disease << " at " << location << " are: " << cases[i].cases << endl;
+            }
+        }
+    }
+}
+
+void get_total_case_per_location_per_disease (string location, string disease) {
+    vector<Case> cases = get_all_cases();
+    vector<string> locations;
+    int total_cases = 0;
+    for (int i = 0; i < cases.size(); i++)
+    {
+        if (cases[i].location == location)
+        {
+            if (cases[i].disease == disease)
+            {
+                total_cases += cases[i].cases;
+            }
+        }
+    }
+    cout << "Cases of " << disease << " at " << location << " are: " << total_cases << endl;
+}
+
+
+void get_total_case_per_disease (string disease) {
+    vector<Case> cases = get_all_cases();
+    vector<string> locations;
+    int total_cases = 0;
+    for (int i = 0; i < cases.size(); i++)
+    {
+            if (cases[i].disease == disease)
+            {
+                total_cases += cases[i].cases;
+            }
+    }
+    cout << "Total cases of " << "'" << disease << " = " << total_cases << endl;
+}
+
+int count_words_of_a_string(string sentence) {
+    int count = 0;
+    for (int i = 0; i < sentence.length(); i++)
+    {
+        if (sentence[i] == ' ')
+        {
+            count++;
+        }
+    }
+    return count + 1;
 }
