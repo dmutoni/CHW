@@ -110,6 +110,20 @@ void displayHelpMenu()
             get_total_case_per_location_per_disease(location, disease);
         }
     }
+    else if (input.find("delete") != std::string::npos)
+    {
+        stringstream ss(input);
+        vector<string> fields;
+        string field;
+
+        while (getline(ss, field, ' '))
+        {
+            fields.push_back(field);
+        }
+
+        string location = fields[1];
+        delete_location(location);
+    }
     else
     {
         cout << "Invalid input" << endl;

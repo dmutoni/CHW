@@ -201,6 +201,34 @@ void print_cases(vector<Case> cases)
     }
 }
 
+void update_to_file_from_vector_locations(vector<Location> locations)
+{
+    ofstream temp_file("temp.txt", ios::out | ios::app);
+
+    for (int i = 0; i < locations.size(); i++)
+    {
+        Location location = locations[i];
+        temp_file << location.id << "," << location.name << endl;
+    }
+    remove("locations.txt");
+    rename("temp.txt", "locations.txt");
+    temp_file.close();
+}
+
+void update_to_file_from_vector_cases(vector<Case> cases)
+{
+    ofstream temp_file("temp.txt", ios::out | ios::app);
+
+    for (int i = 0; i < cases.size(); i++)
+    {
+        Case case_instance = cases[i];
+        temp_file << case_instance.id << "," << case_instance.location << case_instance.disease << case_instance.cases << endl;
+    }
+    remove("cases.txt");
+    rename("temp.txt", "cases.txt");
+    temp_file.close();
+}
+
 void add_case(string location, string disease, int cases)
 {
     add_disease(disease);
@@ -232,7 +260,8 @@ void get_disease_occurrence(string disease)
     }
     cout << "]" << endl;
 }
-void get_case_per_location (string location, string disease) {
+void get_case_per_location(string location, string disease)
+{
     vector<Case> cases = get_all_cases();
     vector<string> locations;
     for (int i = 0; i < cases.size(); i++)
@@ -247,7 +276,8 @@ void get_case_per_location (string location, string disease) {
     }
 }
 
-void get_total_case_per_location_per_disease (string location, string disease) {
+void get_total_case_per_location_per_disease(string location, string disease)
+{
     vector<Case> cases = get_all_cases();
     vector<string> locations;
     int total_cases = 0;
@@ -264,22 +294,24 @@ void get_total_case_per_location_per_disease (string location, string disease) {
     cout << "Cases of " << disease << " at " << location << " are: " << total_cases << endl;
 }
 
-
-void get_total_case_per_disease (string disease) {
+void get_total_case_per_disease(string disease)
+{
     vector<Case> cases = get_all_cases();
     vector<string> locations;
     int total_cases = 0;
     for (int i = 0; i < cases.size(); i++)
     {
-            if (cases[i].disease == disease)
-            {
-                total_cases += cases[i].cases;
-            }
+        if (cases[i].disease == disease)
+        {
+            total_cases += cases[i].cases;
+        }
     }
-    cout << "Total cases of " << "'" << disease << " = " << total_cases << endl;
+    cout << "Total cases of "
+         << "'" << disease << " = " << total_cases << endl;
 }
 
-int count_words_of_a_string(string sentence) {
+int count_words_of_a_string(string sentence)
+{
     int count = 0;
     for (int i = 0; i < sentence.length(); i++)
     {
@@ -289,4 +321,41 @@ int count_words_of_a_string(string sentence) {
         }
     }
     return count + 1;
+}
+void delete_location(string location_name)
+{
+    int count_location = 0;
+    int count_cases = 0;
+    vector<Location> locations = get_all_locations();
+
+    for (int i = 0; i < locations.size(); i++)
+    {
+        Location location = locations[i];
+        if (location.name == location_name)
+        {
+            locations.erase(locations.begin() + i);
+            count_location++;
+        }
+    }
+    if (count_location >= 1)
+    {
+        update_to_file_from_vector_locations(locations);
+        vector<Case> cases = get_all_cases();
+
+        for (int i = 0; i < cases.size(); i++)
+        {
+            Case case_instance = cases[i];
+            if (case_instance.location == location_name)
+            {
+                cases.erase(cases.begin() + i);
+                count_cases++;
+            }
+        }
+        if (count_cases >= 1)
+            update_to_file_from_vector_cases(cases);
+        else
+            cout << "Location not found" << endl;
+    }
+    else
+        cout << "Location not found" << endl;
 }
