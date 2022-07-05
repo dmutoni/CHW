@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+// #include "./models.h"
+#include "./location_service.h"
 
 using namespace std;
 
@@ -21,6 +23,24 @@ void displayHelpMenu()
     cout << "Exist                                                     : Exit the program" << endl;
     cout << "Console > ";
     getline(cin, input);
+    if (input == "list locations")
+    {
+        vector<Location> locations = get_all_locations();
+        print_locations(locations);
+    }
+    else if (input == "exit")
+    {
+        cout << "Exiting the program..." << endl;
+        exit(0);
+    } else if(input.find("add") != std::string::npos) {
+        string location = input.substr(input.find("add") + 3);
+        add_location(location);
+    }
+    else
+    {
+        cout << "Invalid input" << endl;
+        displayHelpMenu();
+    }
 }
 
 int main()
