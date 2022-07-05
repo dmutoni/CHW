@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 // #include "./models.h"
-#include "./location_service.h"
+#include "./all_services.h"
+#include <sstream>
 
 using namespace std;
 
@@ -28,13 +29,36 @@ void displayHelpMenu()
         vector<Location> locations = get_all_locations();
         print_locations(locations);
     }
+    else if (input == "list diseases")
+    {
+        vector<Disease> diseases = get_all_diseases();
+        print_diseases(diseases);
+    }
     else if (input == "exit")
     {
         cout << "Exiting the program..." << endl;
         exit(0);
-    } else if(input.find("add") != std::string::npos) {
+    }
+    else if (input.find("add") != std::string::npos)
+    {
         string location = input.substr(input.find("add") + 3);
         add_location(location);
+    }
+    else if (input.find("record") != std::string::npos)
+    {
+        stringstream ss(input);
+        vector<string> fields;
+        string field;
+
+        while (getline(ss, field, ' '))
+        {
+            fields.push_back(field);
+        }
+
+        string location = fields[1];
+        string disease = fields[2];
+        int cases = stoi(fields[3]);
+        add_case(location, disease, cases);
     }
     else
     {

@@ -20,8 +20,8 @@ class Case: Model {
     public: 
         int id;
         int cases;
-        Location location;
-        Disease disease;
+        string location_id;
+        string disease_id;
 };
 
 class Disease: Model {

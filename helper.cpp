@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 
-bool is_empty_file(std::ifstream &pFile)
-{
-    return pFile.peek() == std::ifstream::traits_type::eof();
-}
+// bool is_empty_file(std::ifstream &pFile)
+// {
+//     return pFile.peek() == std::ifstream::traits_type::eof();
+// }

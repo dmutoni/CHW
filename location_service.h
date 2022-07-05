@@ -8,34 +8,16 @@
 
 using namespace std;
 
-class Model {
-   
-};
-
-class Location: Model {
+class Location {
     public:
         int id;
         string name;
 };
 
-// class Case: Model {
-//     public: 
-//         int id;
-//         int cases;
-//         Location location;
-//         Disease disease;
-// };
-
-// class Disease: Model {
-//     public:
-//         int id;
-//         string name;
-
-//         Disease(int id, string name) {
-//             this->name = name;
-//         }
-// };
-
+bool is_locations_empty_file(std::ifstream &pFile)
+{
+    return pFile.peek() == std::ifstream::traits_type::eof();
+}
 
 vector<Location> get_all_locations()
 {
@@ -61,10 +43,10 @@ vector<Location> get_all_locations()
 }
 
 
-int get_latest_id()
+int get_latest_location_id()
 {
     ifstream file("locations.txt", ios::in);
-    if (is_empty_file(file)) return 0;
+    if (is_locations_empty_file(file)) return 0;
     vector<Location> locations = get_all_locations();
     return locations.back().id;
 }
@@ -81,9 +63,10 @@ void add_location(string name) {
     Location location;
     ofstream file("locations.txt", ios::out | ios::app);
     cout << "reading file..." << endl;
-    location.id = get_latest_id() + 1, name;
+    location.id = get_latest_location_id() + 1, name;
     location.name = name;
     file << location.id << "," << location.name << endl;
     cout << "Location " << name << " is successfully added!" << endl;
     file.close();
 }
+
